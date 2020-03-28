@@ -190,5 +190,3 @@ dist/
 tools/*
 
 # Temporary until all package-lock.json are removed
-src/Bilbayt.Admin/package-lock.json
-src/Bilbayt.Vendor/package-lock.json

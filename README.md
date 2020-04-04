@@ -12,5 +12,8 @@ for each, this will allow you to run different and many instances of your .net c
 5. Add the full phyiscal path of `DotCoreRunner.exe` directory to Path environment variable
    - **Don't include the file name**
    - _you may need to restart your machine_.
-6. Open cmd/powershell and type dotcorerunner 
+6. Open cmd/powershell and type dotcorerunner <application_name> <project_name>
+   - application_name : the application name is the key name in your appsettings.json file
+   - project_name : the name of your .net core project (.csproj)
+   - if you didn't specify the application_name, a list of defined application in appsettings.json file will be displayed.
 7. Enjoy

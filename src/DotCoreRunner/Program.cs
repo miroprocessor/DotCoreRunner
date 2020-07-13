@@ -16,6 +16,8 @@ namespace DotCoreRunner
         private static string AppName { get; set; }
         private static string ProjectName { get; set; }
 
+        private static List<string> Projects => GetAvailableProjects();
+
         private static IConfigurationSection AppToRun => Applications.Single(x => x.Key.ToLower() == AppName.ToLower());
 
         private static void Main(string[] args)
@@ -49,12 +51,9 @@ namespace DotCoreRunner
 
         private static string GetProjectsToRun()
         {
-            var projects = Directory.GetDirectories(Applications.Single(x => x.Key.ToLower() == AppName.ToLower()).Value)
-                                    .Where(x => Directory.GetFiles(x).Any(y => y.EndsWith(".csproj")));
-
             WriteLine("Available .Net Projects");
             WriteLine("***********************");
-            projects.ToList().ForEach(x => WriteLine($"- {x.Split(Path.DirectorySeparatorChar).Last()}"));
+            Projects.ForEach(x => WriteLine($"- {x.Split(Path.DirectorySeparatorChar).Last()}"));
             Write("Enter Project Name : ");
             return ReadLine();
         }
@@ -77,11 +76,36 @@ namespace DotCoreRunner
             if (args.Length > 1)
             {
                 ProjectName = args[1];
+                ValidateProjectName();
             }
             else
             {
                 ProjectName = GetProjectsToRun();
+                ValidateProjectName();
             }
+        }
+
+        private static void ValidateProjectName()
+        {
+            if (!Projects.Contains(ProjectName))
+            {
+                if (Projects.Any(x => x.ToLower().EndsWith($".{ProjectName.ToLower()}")))
+                {
+                    ProjectName = Projects.Single(x => x.ToLower().EndsWith($".{ProjectName.ToLower()}"));
+                }
+                else
+                {
+                    throw new Exception("invalid project name");
+                }
+            }
+        }
+
+        private static List<string> GetAvailableProjects()
+        {
+            var projectsFullPaths = Directory.GetDirectories(Applications.Single(x => x.Key.ToLower() == AppName.ToLower()).Value)
+                                                .Where(x => Directory.GetFiles(x).Any(y => y.EndsWith(".csproj"))).ToList();
+
+            return projectsFullPaths.Select(x => Path.GetFileName(x).ToLower()).ToList();
         }
     }
 }

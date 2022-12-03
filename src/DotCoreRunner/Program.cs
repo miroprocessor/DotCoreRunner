@@ -30,7 +30,7 @@ namespace DotCoreRunner
             Settings(args);
             var startInfo = new ProcessStartInfo();
             startInfo.FileName = @"cmd.exe";
-            startInfo.Arguments = @$"/k dotnet run -p {AppToRun.Value}\{ProjectName}";
+            startInfo.Arguments = @$"/k dotnet run --project {AppToRun.Value}\{ProjectName}";
             startInfo.CreateNoWindow = false;
             startInfo.UseShellExecute = false;
             startInfo.WindowStyle = ProcessWindowStyle.Maximized;
